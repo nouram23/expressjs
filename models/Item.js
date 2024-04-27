@@ -29,6 +29,10 @@ module.exports = function (sequelize, DataTypes) {
         categoryId:{
             type: DataTypes.INTEGER,
             allowNull: false
+        },
+        description:{
+            type: DataTypes.TEXT,
+            allowNull: true
         }
     }, {
         tableName: 'item'
