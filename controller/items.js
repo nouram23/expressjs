@@ -9,10 +9,34 @@ exports.getItems = asyncHandler(async (req, res, next) => {
         attributes: { exclude: ['categoryId'] }
     });
 
+    const groupedItems = {};
+    items.forEach(item => {
+        const categoryName = item.category.categoryName;
+        if (!groupedItems[categoryName]) {
+            groupedItems[categoryName] = [];
+        }
+        groupedItems[categoryName].push({
+            id: item.id,
+            barcodeId: item.barcodeId,
+            name: item.name,
+            price: item.price,
+            image: item.image,
+            isAvailable: item.isAvailable,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt
+        });
+    });
+
+    // Construct the response
+    const response = Object.keys(groupedItems).map(categoryName => ({
+        categoryName: categoryName,
+        items: groupedItems[categoryName]
+    }));
+
     res.status(200).json({
         status: 200,
         success: true,
-        data: items
+        data: response
     });
 });
 
