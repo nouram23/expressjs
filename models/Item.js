@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('item', {
+    const item =  sequelize.define('item', {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,
@@ -33,4 +33,8 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         tableName: 'item'
     })
+    item.associate = (models) => {
+        item.belongsTo(models.Category, { foreignKey: 'categoryId' });
+    };
+    return item
 }

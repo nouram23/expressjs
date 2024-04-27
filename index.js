@@ -7,6 +7,7 @@ const errorHandler = require('./middleware/error')
 
 // Implement Routes
 const usersRoute = require('./routes/users')
+const itemsRoute = require('./routes/items')
 
 const injectDb = require('./middleware/injectDb')
 
@@ -37,12 +38,18 @@ colors.setTheme({
 
 app.use(injectDb(db))
 app.use('/api/v1/user', usersRoute)
+app.use('/api/v1/item', itemsRoute)
 
 app.use(errorHandler);
 
 db.sequelize.sync().then(result => {
     console.log(colors.info(`Syncing database!`))
 }).catch(err => console.log(err, 'Error for syncing...'))
+
+db.item.hasOne(db.category, {
+    foreignKey: 'categoryId',
+  });
+db.item.belongsTo(db.category);
 
 const server = app.listen(process.env.PORT, () => {
     console.log(colors.rainbow(`Up && Running *${process.env.PORT}`))

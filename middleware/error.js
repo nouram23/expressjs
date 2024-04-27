@@ -1,6 +1,7 @@
 const errorHandler = (err, req, res, next) => {
     // console.log(err.stack)
     if(err.message === 'Validation error') err.message = 'Өгөгдөл серверт давхардаж байна!'
+    console.log(err.message)
     res.status(200).json({
         success: err.success || false,
         status: err.statusCode || 500,
