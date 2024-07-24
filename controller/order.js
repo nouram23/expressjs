@@ -6,6 +6,8 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   if (
     !req.body.orderDate ||
     !req.body.orderTime ||
+    !req.body.carType ||
+    !req.body.price ||
     !req.body.email ||
     !req.body.phoneNumber ||
     !req.body.name ||
