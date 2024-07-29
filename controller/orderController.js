@@ -32,6 +32,29 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     data: response,
   });
 });
+
+exports.createMapping = asyncHandler(async (req, res, next) => {
+  if (
+    !req.body.carId ||
+    !req.body.orderId ||
+    !req.body.userId ||
+    !req.body.createdAt ||
+    !req.body.modifiedAt
+  ) {
+    throw new ErrorBuilder(
+      "Захиалга үүсгэхэд шаардагдах үндсэн өгөгдөлүүдийг бүрэн бөглөнө үү?",
+      404,
+      false
+    );
+  }
+
+  const response = await db.createMapping(req.body);
+  res.status(200).json({
+    status: 200,
+    success: true,
+    data: response,
+  });
+});
 exports.getOrders = asyncHandler(async (req, res, next) => {
   const data = await db.getOrders();
   res.status(200).json({

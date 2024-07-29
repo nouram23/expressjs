@@ -25,7 +25,9 @@ exports.createCar = asyncHandler(async (req, res, next) => {
     !req.body.carType ||
     !req.body.userId ||
     !req.file ||
-    !req.body.carNo
+    !req.body.carNo ||
+    !req.body.createdAt ||
+    !req.body.modifiedAt
   ) {
     throw new ErrorBuilder(
       "Үүсгэхэд шаардагдах үндсэн өгөгдөлүүдийг бүрэн бөглөнө үү?",
@@ -53,7 +55,19 @@ exports.getCarTypes = asyncHandler(async (req, res, next) => {
   });
 });
 exports.getCars = asyncHandler(async (req, res, next) => {
-  const data = await db.getCars();
+  const { isActive, type } = req.query;
+
+  const data = await db.getCars(isActive, type);
+  res.status(200).json({
+    status: 200,
+    success: true,
+    data: data,
+  });
+});
+exports.getCarsByType = asyncHandler(async (req, res, next) => {
+  const { type } = req.query;
+
+  const data = await db.getCarsByType(type);
   res.status(200).json({
     status: 200,
     success: true,

@@ -7,6 +7,8 @@ const {
   getDocs,
   getDoc,
   updateDoc,
+  query,
+  where,
 } = require("firebase/firestore");
 const {
   getAuth,
@@ -46,6 +48,12 @@ const createUser = async (data) => {
 const createOrder = async (data) => {
   const uniqueId = uuidv4();
   const document = doc(db, "Orders", uniqueId);
+  const user = await setDoc(document, data);
+  return uniqueId;
+};
+const createMapping = async (data) => {
+  const uniqueId = uuidv4();
+  const document = doc(db, "CarAndOrderMapping", uniqueId);
   const user = await setDoc(document, data);
   return uniqueId;
 };
@@ -93,6 +101,27 @@ const getOrders = async () => {
   }));
   return ordersList;
 };
+const getOrderByUserId = async (userId) => {
+  const ref = collection(db, "CarAndOrderMapping");
+  let _query = query(ref, where("userId", "==", userId));
+
+  const snapshot = await getDocs(_query);
+  const list = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+  if (list.length > 0) {
+    list.forEach(async (element) => {
+      const snapshot = await getOrderById(element.orderId);
+      const orderData = snapshot.data();
+      element.order = { id: snapshot.id, ...orderData };
+      const carSnapshot = await getCarById(element.carId);
+      const carData = carSnapshot.data();
+      element.car = { id: carSnapshot.id, ...carData };
+    });
+  }
+  return list;
+};
 const getCarTypes = async () => {
   const carTypesCollection = collection(db, "CarType");
   const snapshot = await getDocs(carTypesCollection);
@@ -102,9 +131,21 @@ const getCarTypes = async () => {
   }));
   return list;
 };
-const getCars = async () => {
-  const collections = collection(db, "Car");
-  const snapshot = await getDocs(collections);
+const getCars = async (isActive, type) => {
+  const carsRef = collection(db, "Car");
+  let carsQuery = carsRef;
+  if (isActive !== undefined) {
+    carsQuery = query(
+      carsQuery,
+      where("isActive", "==", parseInt(isActive, 10))
+    );
+  }
+  if (type) {
+    carsQuery = query(carsQuery, where("carType", "==", type));
+  }
+
+  // Execute the query and get the snapshot
+  const snapshot = await getDocs(carsQuery);
   const list = snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
@@ -113,6 +154,11 @@ const getCars = async () => {
 };
 const getOrderById = async (id) => {
   const documentRef = doc(db, "Orders", id);
+  const documentSnapshot = await getDoc(documentRef);
+  return documentSnapshot;
+};
+const getCarById = async (id) => {
+  const documentRef = doc(db, "Car", id);
   const documentSnapshot = await getDoc(documentRef);
   return documentSnapshot;
 };
@@ -136,4 +182,6 @@ module.exports = {
   createCar,
   upload,
   uploadImage,
+  createMapping,
+  getOrderByUserId,
 };

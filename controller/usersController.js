@@ -15,6 +15,15 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
   //     data: user,
   //   });
 });
+exports.getMappedOrders = asyncHandler(async (req, res, next) => {
+  const userId = req.params.id;
+  const user = await db.getOrderByUserId(userId);
+  res.status(200).json({
+    status: 200,
+    success: true,
+    data: user,
+  });
+});
 
 exports.getUser = asyncHandler(async (req, res, next) => {
   //   const user = await req.db.user.findAll({

@@ -8,9 +8,11 @@ const {
   updateUser,
   deleteUser,
   loginUser,
+  getMappedOrders,
 } = require("../controller/usersController");
 
 router.route("/").get(getUsers).post(createUser);
+router.route("/orders/:id").get(getMappedOrders);
 
 router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
 

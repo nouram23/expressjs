@@ -3,12 +3,15 @@ const router = express.Router();
 
 const {
   createOrder,
+  createMapping,
   getOrders,
   getOrderById,
   updateOrder,
 } = require("../controller/orderController");
 
 router.route("/").get(getOrders).post(createOrder);
+
+router.route("/mapping").post(createMapping);
 
 router.route("/:id").get(getOrderById).put(updateOrder);
 // delete(deleteUser);
