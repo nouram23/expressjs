@@ -1,5 +1,5 @@
-const ErrorBuilder = require("./../utils/customError");
-const asyncHandler = require("./../middleware/asyncHandler");
+const ErrorBuilder = require("../utils/customError");
+const asyncHandler = require("../middleware/asyncHandler");
 const db = require("../config/firebase");
 const { collection, addDoc } = require("firebase/firestore");
 

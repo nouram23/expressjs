@@ -6,7 +6,7 @@ const {
   getOrders,
   getOrderById,
   updateOrder,
-} = require("../controller/order");
+} = require("../controller/orderController");
 
 router.route("/").get(getOrders).post(createOrder);
 

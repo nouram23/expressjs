@@ -6,8 +6,9 @@ const colors = require("colors");
 const errorHandler = require("./middleware/error");
 
 // Implement Routes
-const usersRoute = require("./routes/users");
-const orderRoute = require("./routes/orders");
+const usersRoute = require("./routes/usersRoute");
+const orderRoute = require("./routes/ordersRoute");
+const carRoute = require("./routes/carRoute");
 // Include configuration process
 dotenv.config({ path: "./config/config.env" });
 
@@ -30,6 +31,7 @@ colors.setTheme({
 
 app.use("/api/v1/user", usersRoute);
 app.use("/api/v1/order", orderRoute);
+app.use("/api/v1/car", carRoute);
 
 app.use(errorHandler);
 

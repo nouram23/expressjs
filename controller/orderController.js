@@ -1,5 +1,5 @@
-const ErrorBuilder = require("./../utils/customError");
-const asyncHandler = require("./../middleware/asyncHandler");
+const ErrorBuilder = require("../utils/customError");
+const asyncHandler = require("../middleware/asyncHandler");
 const db = require("../config/firebase");
 
 exports.createOrder = asyncHandler(async (req, res, next) => {
@@ -10,7 +10,8 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     !req.body.price ||
     !req.body.email ||
     !req.body.phoneNumber ||
-    !req.body.name ||
+    !req.body.firstname ||
+    !req.body.lastname ||
     !req.body.note ||
     !req.body.latitude ||
     !req.body.longitude ||
