@@ -103,25 +103,37 @@ const getOrders = async () => {
 };
 const getOrderByUserId = async (userId) => {
   const ref = collection(db, "CarAndOrderMapping");
-  let _query = query(ref, where("userId", "==", userId));
+  const _query = query(ref, where("userId", "==", userId));
 
   const snapshot = await getDocs(_query);
   const list = snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   }));
-  if (list.length > 0) {
-    list.forEach(async (element) => {
-      const snapshot = await getOrderById(element.orderId);
-      const orderData = snapshot.data();
-      element.order = { id: snapshot.id, ...orderData };
-      const carSnapshot = await getCarById(element.carId);
-      const carData = carSnapshot.data();
-      element.car = { id: carSnapshot.id, ...carData };
-    });
+
+  if (list.length < 1) {
+    return [];
   }
-  return list;
+
+  // Use map to create an array of promises
+  const resultPromises = list.map(async (element) => {
+    const orderSnapshot = await getOrderById(element.orderId);
+    const orderData = orderSnapshot.data();
+    element.order = { id: orderSnapshot.id, ...orderData };
+
+    const carSnapshot = await getCarById(element.carId);
+    const carData = carSnapshot.data();
+    element.car = { id: carSnapshot.id, ...carData };
+
+    return element;
+  });
+
+  // Wait for all promises to resolve
+  const result = await Promise.all(resultPromises);
+
+  return result;
 };
+
 const getCarTypes = async () => {
   const carTypesCollection = collection(db, "CarType");
   const snapshot = await getDocs(carTypesCollection);
