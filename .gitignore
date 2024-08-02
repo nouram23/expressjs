@@ -4,3 +4,5 @@
 .env*.local
 yarn.lock
 /yarn.lock
+# Local Netlify folder
+.netlify

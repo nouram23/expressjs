@@ -13,6 +13,8 @@ const carRoute = require("./routes/carRoute");
 dotenv.config({ path: "./config/config.env" });
 
 const app = express();
+const router = express.Router();
+
 app.use(express.json());
 app.use(cors());
 
@@ -34,14 +36,15 @@ app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/car", carRoute);
 
 app.use(errorHandler);
+module.exports.handler = serverless(app);
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(colors.rainbow(`Up && Running *${process.env.PORT}`));
-});
+// const server = app.listen(process.env.PORT, () => {
+//   console.log(colors.rainbow(`Up && Running *${process.env.PORT}`));
+// });
 
-process.on("unhandledRejection", (err, promise) => {
-  console.log(colors.red.underline(`Алдаа гарлаа: ${err.message}`));
-  server.close(() => {
-    process.exit(1);
-  });
-});
+// process.on("unhandledRejection", (err, promise) => {
+//   console.log(colors.red.underline(`Алдаа гарлаа: ${err.message}`));
+//   server.close(() => {
+//     process.exit(1);
+//   });
+// });
