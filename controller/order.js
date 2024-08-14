@@ -19,7 +19,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     !req.body.modifiedAt
   ) {
     throw new ErrorBuilder(
-      "Захиалга үүсгэхэд шаардагдах үндсэн өгөгдөлүүдийг бүрэн бөглөнө үү?",
+      "Захиалга үүсгэхэд шаардагдах үндсэн өгөгдөлүүдийг бүрэн бөглөн үү? ",
       404,
       false
     );
